@@ -15,7 +15,7 @@ class Node (object):
         for i in range(len(inputs)):
             self.input += inputs[i] * self.w[i]
         self.input += self.b
-        return self.f.eval(self.input)
+        return self.f.at(self.input)
 
     def grad_w(self, inputs, d_node, step):
         '''calculates and applies partial derivatives of Error with respect to
@@ -25,8 +25,16 @@ class Node (object):
         for i, x in enumerate(inputs):
             self.w[i] -= step * x * self.f.derivative(self.input) * d_node
 
-    def grad_b(self, inputs, d_node, step):
+    def grad_b(self, d_node, step):
         '''calculates and applies partial derivatives of Error with respect to
         bias based off last inputs and partial derivative of Error with
         respect to this node's output (d_node). Must be done after an output'''
         self.b -= step * self.f.derivative(self.input) * d_node
+
+    def back_prop(self, d_node):
+        '''outputs a list of partial derivatives of Error wrt every input.
+        Should be done BEFORE updating gradients'''
+        back_prop_d = []
+        for w in self.w:
+            back_prop_d.append(w*self.f.derivative(self.input))
+        return back_prop_d
