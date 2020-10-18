@@ -1,3 +1,4 @@
+import math
 class Function (object):
     '''super class for node functions'''
     def __init__():
@@ -26,4 +27,11 @@ class ReLu (Function):
 
     def derivative(x):
         return int(x > 0)
-        
+
+class Sigmoid (Function):
+    '''normalized sigmoid function'''
+    def at(x):
+        return (1/(1+math.exp(-x)))*2 - 1
+
+    def derivative(x):
+        return 2*math.exp(-x)/math.pow(1+math.exp(-x),2)
